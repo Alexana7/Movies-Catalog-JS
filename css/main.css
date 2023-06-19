@@ -11,6 +11,10 @@ body {
     font-family: 'Oswald', sans-serif;
 }
 
+.none {
+    display: none !important;
+}
+
 /* Cards */
 .container-left {
     padding: 25px 15px 100px;
