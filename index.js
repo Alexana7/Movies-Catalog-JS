@@ -8,32 +8,36 @@ const options = {
     },
 }
 
-// fetch(`${url}top`, options)
-//     .then(res => res.json())
-//     .then(json => console.log(json))
-//     .catch(err => console.log(err));
+const moviesWrapper = document.querySelector('.films');
 
-const filmsWrapper = document.querySelector('.films');
-
-
-async function fetchAndRenderFilms() {
-   
-    const response = await fetch(`${url}top`, options);
-    const data = await response.json()
-    console.log(data)
-    console.log(data.films)
-
-   for (film of data.films) {
-    console.log(film)
-    const html = `<div class="card">
-                    <img class="card-image" src=${film.posterUrlPreview}>
-                    <h3 class="card-title">${film.nameEn}</h3>
-                    <p class="card-year">${film.year}</p>
-                    <p class="card-rate">Рейтинг: ${film.rating}</p>
-                </div>`;
-    filmsWrapper.insertAdjacentHTML('beforeend', html)
-   }
-   
+async function fetchData(url, options) {
+    const response = await fetch(url, options);
+    const data = await response.json();
+    return data;
 
 }
-fetchAndRenderFilms().catch(err => console.log(err));
+
+async function fetchAndRenderMovies() {
+    const data = await fetchData(`${url}top`, options)
+    renderMovies(data.films)
+
+}
+
+function renderMovies(movies) {
+    for (movie of movies) {
+        console.log(movie)
+        const html = `<div class="card">
+                        <img class="card-image" src=${movie.posterUrlPreview}>
+                        <h3 class="card-title">${movie.nameEn}</h3>
+                        <p class="card-year">${movie.year}</p>
+                        <p class="card-rate">Рейтинг: ${movie.rating}</p>
+                    </div>`;
+        moviesWrapper.insertAdjacentHTML('beforeend', html)
+        }
+
+}
+   
+
+
+
+fetchAndRenderMovies().catch(err => console.log(err));
