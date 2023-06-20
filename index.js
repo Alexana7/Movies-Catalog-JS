@@ -17,12 +17,11 @@ const loader = document.querySelector('.loader-wrapper');
 const btnShowMore = document.querySelector('.show-more');
 btnShowMore.onclick = fetchAndRenderMovies;
 
-
 let pageNumber = 1;
-
 
 // get and render TOP 250 movies
 async function fetchAndRenderMovies() {
+   
 
     // show preloader
     loader.classList.remove('none')
@@ -49,7 +48,6 @@ async function fetchData(url, options) {
     const response = await fetch(url, options);
     const data = await response.json();
     return data;
-
 }
 
 function renderMovies(movies) {
@@ -72,7 +70,6 @@ function renderMovies(movies) {
         card.insertAdjacentHTML('afterbegin', html)
         moviesWrapper.insertAdjacentElement('beforeend', card)
     }
-
 }
 
 async function openMovieDetails(e) {
@@ -82,11 +79,7 @@ async function openMovieDetails(e) {
 
    //get movie data by id
     const movieDetails =  await fetchData(url + id, options); 
-    console.log(movieDetails)
-
-
-    renderMovieData(movieDetails);
-   
+    renderMovieData(movieDetails);   
 }
 
 function renderMovieData (movie) {
@@ -124,11 +117,10 @@ function renderMovieData (movie) {
                             <p class="film__details">${movie.year}</p>
                             <p class="film__details">Рейтинг IMDB: ${movie.ratingImdb}</p>
                             <p class="film__details">Продолжительность: ${formatMovieLength(movie.filmLength)}</p>
-                            <p class="film__details">Страна: ${movie.countries[0]['country']}</p>
+                            <p class="film__details">Страна: ${formatCountry(movie.countries)}</p>
                             <p class="film__text">${movie.description}</p>
                     </div>
                 `
-
                 containerRight.insertAdjacentHTML('beforeend', html)   
 
 }
@@ -141,11 +133,18 @@ function formatMovieLength(value) {
 
     if(hours > 0) length += hours + ' ч. '
     if(minutes > 0) length += minutes + ' мин.'
-    console.log(length)
-
-    return length;
-   
+    
+    return length;   
 }
-formatMovieLength(127)
-   
+
+function formatCountry(data) {
+    let countriesString = '';
+
+    for (country of data) {
+        countriesString += country.country
+        if(data.indexOf(country) + 1 < data.length) countriesString += ', '
+    }  
+        return countriesString
+}
+  
 fetchAndRenderMovies().catch(err => console.log(err));
